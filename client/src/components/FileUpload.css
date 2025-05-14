@@ -1,0 +1,112 @@
+/* FileUpload.css */
+.form-control-lg,
+.form-select-lg {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ced4da;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control-lg:focus,
+.form-select-lg:focus {
+  border-color: #86b7fe;
+  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+  font-size: 0.95rem;
+  color: #495057;
+  margin-bottom: 0.5rem;
+}
+
+.card {
+  border: none;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.card-header {
+  border-bottom: none;
+  background: linear-gradient(45deg, #0d6efd, #0a58ca);
+}
+
+.progress-lg {
+  height: 1.5rem;
+  border-radius: 1rem;
+  background-color: #e9ecef;
+}
+
+.progress-lg .progress-bar {
+  background: linear-gradient(45deg, #0d6efd, #0a58ca);
+  transition: width 0.3s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #0d6efd, #0a58ca);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #0a58ca, #084298);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary:disabled {
+  background: #6c757d;
+  transform: none;
+  box-shadow: none;
+}
+
+.alert {
+  border-radius: 0.5rem;
+  border: none;
+}
+
+.alert-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
+/* Custom file input styling */
+.form-control[type="file"] {
+  padding: 0.375rem 0.75rem;
+  background-color: #f8f9fa;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button {
+  background: linear-gradient(45deg, #0d6efd, #0a58ca);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  margin-right: 1rem;
+  cursor: pointer;
+}
+
+.form-control[type="file"]::-webkit-file-upload-button:hover {
+  background: linear-gradient(45deg, #0a58ca, #084298);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .card-body {
+    padding: 1.5rem;
+  }
+  
+  .form-control-lg,
+  .form-select-lg {
+    font-size: 0.95rem;
+  }
+} 
