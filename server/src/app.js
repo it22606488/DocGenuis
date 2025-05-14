@@ -6,6 +6,10 @@ const morgan = require('morgan');
 const path = require('path');
 require('dotenv').config();
 
+//raveen
+const documentsRoutes = require("./routes/documentsRoutes");
+const versionRoutes = require("./routes/versionRoutes");
+
 // Import routes
 const documentRoutes = require('./routes/documentRoutes');
 const searchRoutes = require('./routes/searchRoutes');
@@ -52,7 +56,9 @@ mongoose.connect(MONGODB_URI, {
 app.use('/api/documents', documentRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/users', userRoutes);
-
+//raveen
+app.use("/api/documentsd", documentsRoutes);
+app.use("/app", versionRoutes);
 // Simple test route
 app.get('/api/test', (req, res) => {
   res.json({ message: 'API is working!' });
