@@ -1,0 +1,13 @@
+.close-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+    transition: color 0.2s;
+  }
+  
+  .close-button:hover {
+    color: #1f2937;
+  }
+  
+  /* The rest of the styles are inherited from App.css */
