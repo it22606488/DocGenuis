@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Login from './components/Login';
 import Register from './components/Register';
 import FileUpload from './components/FileUpload';
-import DocumentSearch from './components/DocumentSearch';
+
 import Dashboard from './components/Dashboard';
 import Navbar from './components/Navbar';
 import DocumentView from './components/DocumentView';
@@ -85,9 +85,11 @@ function App() {
             </ProtectedRoute>
           } />
 
+
           <Route path="/search" element={
             <ProtectedRoute>
-              <DocumentSearch />
+            
+          
               <Search />
 
             </ProtectedRoute>

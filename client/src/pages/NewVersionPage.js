@@ -80,15 +80,19 @@ const VersionHistoryPage = () => {
   };
 
   // Delete a version
-  const handleDelete = async (id) => {
-    console.log(id);
-    try {
-      await axios.delete(`http://localhost:5000/app/version/${id}`);
-      window.location.reload();
-    } catch (error) {
-      console.error("Error deleting document", error);
-    }
-  };
+const handleDelete = async (id) => {
+  const confirmDelete = window.confirm("Are you sure you want to delete this document?");
+  if (!confirmDelete) return;
+
+  console.log(id);
+  try {
+    await axios.delete(`http://localhost:5000/app/version/${id}`);
+    window.location.reload();
+  } catch (error) {
+    console.error("Error deleting document", error);
+  }
+};
+
 
   // Filter versions based on search term
   const filteredVersions = versions.filter((version) =>

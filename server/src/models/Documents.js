@@ -7,4 +7,4 @@ const DocumentSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Documentt', DocumentSchema);
+module.exports = mongoose.model('Documenttt', DocumentSchema);
