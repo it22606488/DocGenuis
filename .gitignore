@@ -1,0 +1,17 @@
+/config/uploads
+/uploads
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+# testing
+/coverage
+
+# production
+/build
+
+.env
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
