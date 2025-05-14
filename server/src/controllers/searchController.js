@@ -5,6 +5,10 @@ const { trackUserActivity, enhanceSearchQuery } = require('../services/aiService
 // Search documents with AI enhancement
 exports.searchDocuments = async (req, res) => {
   try {
+    console.log('Search request received:', req.method);
+    console.log('Query params:', req.query);
+    console.log('Request body:', req.body);
+    
     // Handle both GET and POST requests
     let searchQuery = '';
     let filters = {};
@@ -13,10 +17,15 @@ exports.searchDocuments = async (req, res) => {
       // Extract from query parameters for GET requests
       searchQuery = req.query.q || '';
       
-      // Extract filters from query parameters
-      if (req.query.category) filters.category = req.query.category;
+      console.log('Search query:', searchQuery);
       
-      if (req.query.dateRange) {
+      // Extract filters from query parameters
+      if (req.query.category && req.query.category.trim() !== '') {
+        filters.category = req.query.category;
+        console.log('Category filter applied:', filters.category);
+      }
+      
+      if (req.query.dateRange && req.query.dateRange.trim() !== '') {
         // Handle date range filters
         const now = new Date();
         const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -27,6 +36,7 @@ exports.searchDocuments = async (req, res) => {
               start: today,
               end: now
             };
+            console.log('Date filter - Today applied');
             break;
           case 'week':
             const weekStart = new Date(today);
@@ -35,6 +45,7 @@ exports.searchDocuments = async (req, res) => {
               start: weekStart,
               end: now
             };
+            console.log('Date filter - Week applied');
             break;
           case 'month':
             const monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -42,6 +53,7 @@ exports.searchDocuments = async (req, res) => {
               start: monthStart,
               end: now
             };
+            console.log('Date filter - Month applied');
             break;
           case 'year':
             const yearStart = new Date(today.getFullYear(), 0, 1);
@@ -49,13 +61,18 @@ exports.searchDocuments = async (req, res) => {
               start: yearStart,
               end: now
             };
+            console.log('Date filter - Year applied');
             break;
         }
       }
       
       // Handle sort options
-      const sortBy = req.query.sortBy || 'relevance';
-      filters.sortBy = sortBy;
+      if (req.query.sortBy && req.query.sortBy.trim() !== '') {
+        filters.sortBy = req.query.sortBy;
+        console.log('Sort filter applied:', filters.sortBy);
+      } else {
+        filters.sortBy = 'relevance';
+      }
       
     } else {
       // Extract from request body for POST requests
@@ -66,7 +83,7 @@ exports.searchDocuments = async (req, res) => {
     
     const userId = req.user.id;
     
-    console.log('Search request:', {
+    console.log('Processed search request:', {
       query: searchQuery,
       filters,
       userId
@@ -94,12 +111,22 @@ exports.searchDocuments = async (req, res) => {
     
     // Only use text search if there's a query
     if (enhancedQuery && enhancedQuery.trim().length > 0) {
-      searchConditions.$text = { $search: enhancedQuery };
+      // For text search, we use regex search on title, description and content
+      // This is more forgiving than $text search for simple keywords
+      const searchRegex = new RegExp(enhancedQuery.trim(), 'i');
+      searchConditions.$or = [
+        { title: searchRegex },
+        { description: searchRegex },
+        { content: searchRegex },
+        { tags: searchRegex },
+        { category: searchRegex }
+      ];
     }
     
     // Apply filters
-    if (filters.category) {
-      searchConditions.category = filters.category;
+    if (filters.category && filters.category.trim() !== '') {
+      // Use case-insensitive regex for category matching
+      searchConditions.category = new RegExp('^' + filters.category.trim() + '$', 'i');
     }
     
     if (filters.tags && filters.tags.length > 0) {
@@ -115,16 +142,16 @@ exports.searchDocuments = async (req, res) => {
     
     // Determine sort order
     let sortOptions = {};
-    if (enhancedQuery && enhancedQuery.trim().length > 0) {
-      // Text search relevance
-      sortOptions = { score: { $meta: 'textScore' } };
+    if (enhancedQuery && enhancedQuery.trim().length > 0 && filters.sortBy === 'relevance') {
+      // No special sorting for relevance with regex search
+      sortOptions = { createdAt: -1 };
     } else {
       // No search query - sort by date
       sortOptions = { createdAt: -1 };
     }
     
     // Apply user's sort preference
-    if (filters.sortBy) {
+    if (filters.sortBy && filters.sortBy !== 'relevance') {
       switch(filters.sortBy) {
         case 'newest':
           sortOptions = { createdAt: -1 };
@@ -132,25 +159,45 @@ exports.searchDocuments = async (req, res) => {
         case 'oldest':
           sortOptions = { createdAt: 1 };
           break;
+        case 'title':
+          sortOptions = { title: 1 };
+          break;
+        case 'size':
+          sortOptions = { fileSize: -1 };
+          break;
         case 'mostViewed':
           sortOptions = { viewCount: -1 };
           break;
         case 'mostDownloaded':
           sortOptions = { downloadCount: -1 };
           break;
-        // relevance is the default using text score
       }
     }
     
     console.log('Search conditions:', JSON.stringify(searchConditions, null, 2));
-    console.log('Sort options:', sortOptions);
+    console.log('Sort options:', JSON.stringify(sortOptions, null, 2));
+    
+    // If no search conditions, return all documents (limited)
+    if (Object.keys(searchConditions).length === 0) {
+      console.log('No search conditions - returning recent documents');
+      const documents = await Document.find()
+        .sort({ createdAt: -1 })
+        .limit(20);
+      
+      console.log(`Search returned ${documents.length} results`);
+      return res.json(documents);
+    }
     
     // Execute search
+    console.log('Executing search with conditions:', JSON.stringify(searchConditions, null, 2));
     const documents = await Document.find(searchConditions)
       .sort(sortOptions)
       .limit(20);
     
     console.log(`Search returned ${documents.length} results`);
+    if (documents.length > 0) {
+      console.log('Sample result:', documents[0].title);
+    }
     
     // Skip AI personalization for now to simplify debugging
     // const personalizedResults = await require('../services/aiService')

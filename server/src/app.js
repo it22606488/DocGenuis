@@ -6,11 +6,6 @@ const morgan = require('morgan');
 const path = require('path');
 require('dotenv').config();
 
-
-//raveen
-const documentsRoutes = require("./routes/documentsRoutes");
-const versionRoutes = require("./routes/versionRoutes");
-
 // Import routes
 const documentRoutes = require('./routes/documentRoutes');
 const searchRoutes = require('./routes/searchRoutes');
@@ -25,17 +20,17 @@ app.use(morgan('dev'));
 
 // Configure CORS properly
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: 'http://localhost:3001',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
+app.options('*', cors());
+
 // Serve uploads as static files
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
-// Routes
-app.use("/api/documentsd", documentsRoutes);
-app.use("/app", versionRoutes);
+
 // MongoDB connection
 const MONGODB_URI = process.env.MONGODB_URI || process.env.MONGO_URI || 'mongodb://localhost:27017/document-management-system';
 

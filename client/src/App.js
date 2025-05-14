@@ -18,12 +18,16 @@ import UploadForm from './pages/UploadForm';
 import DocumentList from './pages/DocumentList';
 import EditDocument from './pages/EditDocument';
 import Versionadd from './pages/NewVersionPage';
+import IconTest from './components/IconTest';
+import Search from './components/Search';
+import { AllDocs } from './pages/AllDocs/src/AllDocs';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Check if user is authenticated on component mount
     const token = localStorage.getItem('token');
     if (token) {
       setIsAuthenticated(true);
@@ -31,7 +35,9 @@ function App() {
     setLoading(false);
   }, []);
 
+
   useEffect(() => {
+
     const updateBodyPadding = () => {
       const navbar = document.querySelector('.navbar-custom');
       if (navbar) {
@@ -39,10 +45,18 @@ function App() {
         document.body.style.paddingTop = `${navbarHeight}px`;
       }
     };
+
+
+
+    // Initial update and add listener for window resize
     updateBodyPadding();
     window.addEventListener('resize', updateBodyPadding);
+
+    // Cleanup listener on component unmount
     return () => window.removeEventListener('resize', updateBodyPadding);
   }, []);
+
+  // Protected route component
 
   const ProtectedRoute = ({ children }) => {
     if (loading) return <div>Loading...</div>;
@@ -58,6 +72,7 @@ function App() {
           <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/register" element={<Register />} />
           
+
           <Route path="/" element={
             <ProtectedRoute>
               <Dashboard />
@@ -73,6 +88,8 @@ function App() {
           <Route path="/search" element={
             <ProtectedRoute>
               <DocumentSearch />
+              <Search />
+
             </ProtectedRoute>
           } />
 
@@ -81,6 +98,7 @@ function App() {
               <DocumentView />
             </ProtectedRoute>
           } />
+
 
           {/* Routes from your original snippet */}
           <Route path="/home" element={
@@ -108,10 +126,23 @@ function App() {
               <Versionadd />
             
           } />
+
+          <Route path="/documents" element={
+            <ProtectedRoute>
+              <AllDocs />
+            </ProtectedRoute>
+          } />
+
+          <Route path="/icon-test" element={<IconTest />} />
+
         </Routes>
       </Container>
     </Router>
   );
 }
 
+
 export default App;
+
+
+
