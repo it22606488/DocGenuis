@@ -22,8 +22,6 @@ import IconTest from './components/IconTest';
 import Search from './components/Search';
 import { AllDocs } from './pages/AllDocs/src/AllDocs';
 
-import {App2} from '../src/App2';
-
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -113,13 +111,6 @@ function App() {
           <Route path="/uploads" element={
           
               <UploadForm />
-            
-          } />
-
-//////////////////////////////////////
-             <Route path="/savi" element={
-          
-              <App2 />
             
           } />
           <Route path="/documentss" element={
