@@ -21,6 +21,8 @@ import Versionadd from './pages/NewVersionPage';
 import IconTest from './components/IconTest';
 import Search from './components/Search';
 import { AllDocs } from './pages/AllDocs/src/AllDocs';
+import {App2} from './App2'; // Import App2 component
+
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -126,6 +128,13 @@ function App() {
           <Route path="/version/:id" element={
           
               <Versionadd />
+            
+          } />
+
+///////////////
+            <Route path="/new" element={
+          
+              <App2/>
             
           } />
 

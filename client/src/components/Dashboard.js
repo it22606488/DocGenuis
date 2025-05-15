@@ -210,9 +210,16 @@ const Dashboard = () => {
     );
   }
 
+
+ const uploadAllDocuments2 = async () => {
+    navigate('/new');
+ }
+
 //raveen
   const uploadAllDocuments = async () => {
     navigate('/documentss');
+
+    
   }
   return (
     <Container fluid className="dashboard-container">
@@ -354,6 +361,20 @@ const Dashboard = () => {
               </div>
             </div>
         </Col>
+
+<Col md={2} sm={6} className="mb-4">
+            <div className="stat-card" onClick={uploadAllDocuments2} style={{ cursor: 'pointer' }}>
+              <div className="card-body">
+                <div className="stat-icon">
+                  <FaFileAlt />
+              </div>
+                {/* <div className="stat-value">{stats.totalDocuments}</div> */}
+                <div className="stat-label">category
+</div>
+              </div>
+            </div>
+        </Col>
+
       </Row>
 
       <Row>

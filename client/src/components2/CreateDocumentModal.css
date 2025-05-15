@@ -1,0 +1,36 @@
+/* Additional styles specific to the document modal */
+.document-modal {
+    width: 600px; /* Wider for the document editor */
+    max-width: 90%;
+  }
+  
+  .form-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    min-height: 120px;
+  }
+  
+  .form-textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+  
+  /* Loading and error states */
+  .loading, .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 18px;
+    color: #555;
+  }
+  
+  .error {
+    color: #d9534f;
+  }
